@@ -27,17 +27,17 @@ def add_file(request):
 
 
 def public_file(request):
-    public_file=Files.objects.all().filter(filetype=1) #to fetch all record
+    public_file=Files.objects.all().filter(filetype=1)  #to fetch all record
     date_dict={'public_file':public_file}
     return render(request,"Files/public_file.html",date_dict)
 
 def private_file(request):
     private_file=Files.objects.all().filter(filetype=2,user_id=request.user) #to fetch all record
+    
     date_dict={'private_file':private_file}
     return render(request,"Files/private_file.html",date_dict)
 
 def shaired_file(request):
-    Custom_user=request.user
     member_object=Member.objects.get(custom_user=request.user) #to fetch perticular  records
     permission_object=Permission.objects.all().filter(member=member_object)
     data_dict={'permission_object':permission_object}
