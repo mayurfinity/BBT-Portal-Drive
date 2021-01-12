@@ -1,0 +1,227 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href=" https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+{% endblock stylesheets %}
+
+{% block headscript %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+{% endblock headscript %}
+
+
+<!-- Page Content  -->
+{% block content %}
+    <h2 class="mb-4"> BBT Drive Portal</h2>
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-4">Users</h2>
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#add_user" style="font-size: 12px;">Add User</button>
+
+
+            <!-- Modal start-->
+            <div class="modal fade" id="add_user" tabindex="-1" role="dialog" aria-labelledby="add_user" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="add_user">Add User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{% url 'user:add_user' %}" method="POST">
+                                {% csrf_token %}
+                                        {%if error_msg%}
+                                        <p style='color :red'>{{error_msg}}</p>
+                                        {% endif %}
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="username">Username</label>
+                                        <input type="usernmae" class="form-control border border-dark" id="username" name="username" placeholder="username">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="emailAddress">email</label>
+                                        <input type="email" class="form-control border border-dark" id="email" name="email" placeholder="xyz@gmail.com">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password"> Password</label>
+                                    <input type="password" class="form-control border border-dark" id="password" name="password" placeholder="password">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="mobileno">Mobile Number</label>
+                                        <input type="text" class="form-control border border-dark" id="mobileno" name="mobileno">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="role">Role </label>
+                                        <select id="role" name="role" class="form-control border border-dark">
+                                            <option value=1>Admin</option>
+                                            <option value=2>Team Member</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <button type="submit" class="btn btn-primary">submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal end-->
+        </div>
+    </div>
+
+    <!--data table-->
+    <table id="example" class="display" style="width:100%;">
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Mobile No</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for acc in user %}
+                <tr>
+                    <td>{{acc.first_name}}</td>
+                    <td>{{acc.last_name}}</td>
+                    <td>{{acc.username}}</td>
+                    <td>{{acc.email}}</td>
+                    <td>{{acc.mobaileno}}</td>
+                    {% if acc.role == 1 %}
+                        <td>Admin</td>
+                        {% else %}
+                        <td>Team member</td>
+                        {% endif %}
+                    <td><button type="button" class="btn btn-info " data-toggle="modal"
+                            data-target="#update_user{{acc.pk}}" style="font-size: 12px;">Update</button>
+                        <button class="btn btn-sm btn-danger" data-toggle="modal"
+                            data-target="#Deleteuser{{acc.pk}}"><i class="fa fa-trash"></i></button>
+                    </td>
+
+                    <!-- update Modal -->
+                    <div class="modal fade" id="update_user{{acc.pk}}" tabindex="-1" role="dialog"
+                        aria-labelledby="add_user2" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="add_user2">Update User Information</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{% url 'user:updateInfo' acc.pk %} " method="POST"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="father_name"> First Name</label>
+                                                <input type="text" class="form-control border border-dark"
+                                                    id="first_name" name="firstname" value="{{acc.first_name}}">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="surname">Last Name</label>
+                                                <input type="text" class="form-control border border-dark"
+                                                    id="Last_name" name="lastname" value="{{acc.last_name}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username">Username</label>
+                                            <input type="usernmae" class="form-control border border-dark" id="username"
+                                                name="username" value="{{acc.username}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="emailAddress">email</label>
+                                            <input type="email" class="form-control border border-dark" id="email"
+                                                name="email" value="{{acc.email}}">
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="mobileno">Mobile Number</label>
+                                                <input type="text" class="form-control border border-dark" id="mobileno"
+                                                    name="mobileno" value="{{acc.mobaileno}}">
+                                            </div>
+
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                    
+                 <!--  Delete Modal-->
+                    <div class="modal fade" id="Deleteuser{{acc.pk}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are You Sure you want to Delete?
+                                    <br><br>
+                                    <a href="{% url 'user:user_delete' acc.pk %}" class="btn btn-danger" onclick=" return
+                                        confirm">Delete</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div> 
+                    <!--  Delete Modal--> 
+
+                    {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+{% endblock %}
+
+{% block extrascript %}
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: []
+        });
+    });
+
+</script>
+{% endblock %}

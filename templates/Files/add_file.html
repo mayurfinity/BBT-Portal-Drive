@@ -1,0 +1,48 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block headscript %}
+{% endblock headscript %}
+        <!--   forms start here-->
+
+{% block content %}
+            <h2 class="mb-4"> BBT Drive</h2>
+            <h3>Add File</h3>
+            <form action="{% url 'Files:add_file' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="filename">File Name</label>
+                        <input type="text" class="form-control border border-dark" id="Name" placeholder="filename" name='filename'>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="filetype">File Type</label>
+                        <select id="filetype" name="filetype" class="form-control border border-dark">
+                            <option value=1>Public</option>
+                            <option value=2>Private</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="filedescription">File Description</label>
+                        <input type="text" class="form-control border border-dark" id="filedescription" placeholder="file description" name='filedescription'>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="exampleFormControlFile1">Upload File</label>
+                        <input type="file" class="form-control-file border border-dark" id="exampleFormControlFile1" name="uploadfile">
+                    </div>
+                </div>
+
+                <center> <button type="submit" class="btn btn-primary">Submit</button></center>
+            </form>
+{% endblock %}
+
+{% block script %}    
+{% endblock %}
+
+{% block extrascript %}
+{% endblock %}
