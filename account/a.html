@@ -1,0 +1,155 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<style>
+    .input-size {
+        font-size: 12px;
+        border-color: #d9d9d9;
+    }
+
+    .mrn-b {
+        margin-bottom: -10px;
+    }
+
+    .form-label {
+        color: #4bd0ff;
+    }
+
+    .table-striped>tbody>tr:nth-child(2n+1)>td,
+    .table-striped>tbody>tr:nth-child(2n+1)>th {
+        background-color: #dbe5f1;
+    }
+
+    label {
+        float: left;
+    }
+
+    .form-control {
+        font-size: 13px
+    }
+
+</style>
+{% endblock stylesheets %}
+
+{% block headscript %}
+{% endblock headscript %}
+
+{% block content %}
+<div id="content" class="p-4 p-md-5 pt-5">
+    <div class="mb-2">
+        <form>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control a blue-color" placeholder=" Enter Registered Mobile Number ">
+                </div>
+                <div class="col">
+                    <select class="form-control a blue-color" style="font-size: 12px ;height:36px">
+                        <option>Select Type of Commuter</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn a blue-color" style="background-color:#00b0f0;color: #fff">SEARCH</button>
+                </div>
+                <div class="col-2">
+                    <div style="margin-top: -20px">
+                        <label style="color: #828586"><span style="font-size: 9px;color: #d9d9d9">Welcome,</span> Manjeet<br>
+                            <img src="{% static 'dashboard/images/profile.png' %}" class="mx-auto d-block" width="30px" height="30px"></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div>
+        <div class="row">
+            <div class="col-6">
+                <h4>BUILDINGS</h4>
+            </div>
+            <div class="col-6">
+                <button type="submit" class="btn a blue-color" style="float: right;background-color:#00b0f0;color: #fff" data-toggle="modal" data-target="#AddBuilding">Add Building</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="AddBuilding" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Building</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="POST">
+                                <div class="form-group">
+                                    <label for="building_name">Building Name</label>
+                                    <input type="text" class="form-control" id="" name="building_name" placeholder="Building Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="building_code">Building Code</label>
+                                    <input type="text" class="form-control" id="" name="building_code" placeholder="Building Code">
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Add Building</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-div">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped" id="table-data" style="width: 100%;font-size: 12px">
+                <thead>
+                    <tr>
+                        <th>S.No. </th>
+                        <th>Building Name</th>
+                        <th>Link</th>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+                    {% for value in building %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ value.building_name }}</td>
+                        <td>http://127.0.0.1:8000/cbre_survey_form/cbre_survey_form/{{value.pk}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
+
+
+{% block extrascript %}
+<!-- script for datatable-->
+<script>
+    $(document).ready(function() {
+        $('#table-data').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'excelHtml5',
+
+            ]
+        });
+    });
+
+</script>
+<!-- script for datatable-->
+
+{% endblock extrascript %}

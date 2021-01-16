@@ -87,30 +87,33 @@
                 </button>
               </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                            <label for="username"> username</label>
+                <form action="{% url 'Files:share_submit' acc.pk %}" method="POST">
+                {% csrf_token %}
+                      <div class="form-group">
+                              <label for="username"> username</label>
 
-                            <select class="form-control border border-dark" name="username" id="username">
-                            {% for value in Member %}
-                                <option value="{{value.pk}}">{{value.custom_user.username}}</option>
-                            {% endfor %}
-                            </select>
+                              <select class="form-control border border-dark" name="username" id="username">
+                              {% for value in member %}
+                                  <option value="{{value.pk}}">{{value.custom_user.username}}</option>
+                              {% endfor %}
+                              </select>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-dismiss="modal"
-                            >
-                            Close
-                        </button>
-                        <button 
-                            type="button"
-                            class="btn btn-primary">
-                            share
-                        </button>
-                    </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button
+                              type="button"
+                              class="btn btn-secondary"
+                              data-dismiss="modal"
+                              >
+                              Close
+                          </button>
+                          <button 
+                              type="submit"
+                              class="btn btn-primary">
+                              share
+                          </button>
+                      </div>
+                    </form>
                 </div>
             </div>
           </div>
